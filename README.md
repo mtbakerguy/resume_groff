@@ -3,7 +3,7 @@
 To start with, ensure you have a version of groff installed that
 supports PDF document generation. This typically won't be a problem
 unless you are on OSX and trying to use the default that comes with
-the os.  On a Linux system, you may need to install the full groff
+the os (typically fixable with a `brew install groff`).  On a Linux system, you may need to install the full groff
 package as some distributions have a minimal installation that doesn't
 include the full suite of macro sets.
 
