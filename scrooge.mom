@@ -1,0 +1,55 @@
+.so macros.mom
+\#
+\#
+\#  begin custom macros
+\#
+\#
+\#
+.de DirectorMoneyPiles
+.LISTIFY "More than 50 years experience in finance and accounting." "Outstanding mcduckery." "Brilliant communication skills" "Accomplished in hiding money, sleeping on money, and dabbling in excessive accumulation." "Loved by my nephews."
+..
+.de ToolsAndTechnologies
+.LISTIFY "\*[BD]Accounting packages: \*[PREV]  something, something2, something3" "\*[BD]Finance packages: \*[PREV]  finance1, finance2, finance3" 
+..
+.de Employment
+.POSITION "Director Finance \[em] McDuck's, Anaheim CA" 2010 Present "Responsible for mo money, mo money, mo money."
+.LISTIFY "Partnered with multiple financiers to do finance things." "Had plenty of meetings."  "Ate plenty of pate."
+.POSITION "Senior Finance Manager, McDuck's, Anaheim CA" 2006 2010 "Some amount of money managed."
+.LISTIFY "Partnered with multiple financiers to do finance things." "Had plenty of meetings."  "Ate plenty of pate."
+.POSITION "Finance Manager, MM Inc, Anaheim CA" 2004 2006 "Cried all the way to the bank."
+.LISTIFY "Partnered with multiple financiers to do finance things." "Had plenty of meetings."  "Ate plenty of pate."
+..
+.de EarlyCareer
+.EARLYJOBS "Junior Financier \[em] Goofy Inc, Anaheim, CA" 1968 1972
+.EARLYJOBS "Less Junior Financier \[em] Goofy Inc, Anaheim, CA" 1972 1982
+.EARLYJOBS "Journeyman Financier \[em] Goofy Inc, Anaheim, CA" 1982 2002
+..
+.de Education
+.SCHOOL "Bachelor of Science, Economics" "MM University, Anaheim, CA"
+..
+\#
+\# end custom macros
+\#
+\#
+\#
+.PDFsetup Resume "Scrooge McDuck" "Piles of Money Inc." Finance Accounting
+.HEADER "(212) 555 1212" "scrooge@mcduck.com" "Scrooge McDuck"
+.SECTION "Director of Money Piles" .EMPTY 14 .EMPTY .EMPTY 0P .DirectorMoneyPiles
+.SECTION "Tools & Technologies" .BR 12 .MYLINE .DBX 0P .ToolsAndTechnologies
+\# Tables are processed by `tbl' prior to `groff' evaluating
+\# its input.  As a result, tables can't easily be defined
+\# in custom macros so this must be inlined instead.
+.SECTION Expertise .EL 12 .MYLINE .DBX 4p .Empty
+.PT_SIZE -1.4
+.TS
+tab(:),center;
+l l l.
+blah1:blah2:blah3
+blah4:blah5:blah6
+blah6:blah7:blah8
+.TE
+.PT_SIZE
+.RLD 1.5P
+.SECTION Employment .EL 12 .MYLINE .DBX 0P .Employment
+.SECTION "Earlier Career" .EL 12 .MYLINE .DBX 1P .EarlyCareer
+.SECTION Education .EL 12 .MYLINE .DBX 1P .Education

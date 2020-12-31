@@ -1,0 +1,128 @@
+.PAPER EXECUTIVE
+.L_MARGIN 3P
+.R_MARGIN 3P
+.T_MARGIN 2P
+.B_MARGIN 2P
+.FAMILY A
+\# .PDFsetup title author subject keywords
+.de PDFsetup
+.pdfview /PageMode /UseOutlines
+.pdfinfo /Title \\$1
+.pdfinfo /Author \\$2
+.pdfinfo /Subject \\$3
+.shift 3
+.pdfinfo /Keywords \\$*
+..
+\# .MYLINE adjustment
+\# example:  .MYLINE 1P (jump up a line and write a line)
+.de MYLINE
+.RLD \\$1
+.DRH .75 -.25P 6.30i black
+.ALD \\$1
+..
+\# .EMPTY
+\# a null macro used as a placeholder so macros can avoid
+\# conditional statements
+.de EMPTY
+..
+\# .HEADER phone email name
+.de HEADER
+.EL
+.DBX SOLID -0.25P 6.30i 1.25P lightgray
+.DBX .25 -0.25P 6.30i 1.25P
+.ALD .15i
+.LEFT
+.PT_SIZE 10
+\\$1 \c
+.EL
+.RIGHT
+\\$2 \c
+.EL
+.CENTER
+.FT B
+.PT_SIZE 14
+.ALD .07c
+\\$3
+.PT_SIZE
+..
+\# .SECTION section-name spacing-macro section-name-pointsize line-macro box-macro vspace internal
+\#    section-name: string
+\#    spacing-macro: (.BR | .EMPTY | .EL)
+\#    pt-size:  point-size for the section name
+\#    line-macro: (.MYLINE | .EMPTY)
+\#    box-macro:  (.DBX | .EMPTY)
+\#    vspace: (number to drop base)
+\#    internal:  customized macro to insert user-defined formatting
+.de SECTION 
+\\$5 SOLID -0.25P 6.30i 1P lightgray
+.CENTER
+.FT B
+.PT_SIZE \\$3
+.ALD .8P
+\\$4 .75P
+\\$1
+.PT_SIZE
+.FT R
+.JUSTIFY LEFT
+\\$2
+.ALD \\$6
+\\$7
+..
+\# .SCHOOL degree name-and-address
+.de SCHOOL
+.FT B
+.PT_SIZE +1
+\\$1
+.BR
+.FT I
+\\$2
+.PT_SIZE
+.BR
+.FT R
+..
+\# .EARLYJOBS position-and-place start-date end-date
+.de EARLYJOBS
+.FT B
+.PT_SIZE +.10
+\\$1 \[em]
+.FT R
+.PT_SIZE
+\\$2 \[en] \\$3
+.BR
+..
+\# .POSITION position-name who-where start-date end-date summary
+\# mostly an internal helper to reuse macro code for  .IC and .MANAGER 
+.de POSITION
+.ALD .9P
+.FT B
+.PT_SIZE +1
+\\$1
+.BR
+.PT_SIZE
+.FT R
+.UNDERSCORE "\\$2 \[em] \\$3 \[en] \\$4"
+.FT I
+.BR
+\\$5
+.FT R
+..
+\# .LISTHELPER item
+.de _LISTHELPER
+.   if (\\n[.$] == 0)
+.      return
+.   ITEM
+\\$1
+.   shift
+.       _LISTHELPER \\$@
+..
+\# .LISTIFY item | items
+\# create an arbitrarily long unordered list
+.de LISTIFY
+.IQ CLEAR
+.LIST
+._LISTHELPER \\$@
+.LIST OFF
+\# not sure why the following is needed
+.RLD 1P
+.IQ CLEAR
+..

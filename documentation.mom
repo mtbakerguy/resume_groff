@@ -1,0 +1,182 @@
+.PAPER EXECUTIVE
+.TITLE DOC_COVER "A Micro-framework for Typesetting a R\['e]sum\['e]"
+.PRINTSTYLE  TYPESET
+.FAMILY H
+.DOC_COVER TITLE
+.START
+.pdfinfo /Title .TITLE
+.pdfinfo /Keywords Resume
+.char \[resume] r\['e]sum\['e]
+.char \[groff] \*[IT]groff\*[PREV]
+.HEADING 1 NAMED intro "Introduction"
+This document details how to use the macros in \*[IT]macros.mom\*[PREV] to
+build a \[resume].  This is macro set is intended to be opinionated on
+what is aesthetically pleasing and organized and, as a result, there
+are only a few macros to learn to construct a \[resume].
+
+This is intended to be a reference guide.  To get started, see the \*[IT]scrooge.mom\*[PREV] file in the source distribution as it is the primary example on how to use the macros.
+.bp
+.HEADING 1 NAMED  macros "Macro list
+A list of macros follows:
+
+.LIST
+.ITEM
+\*[BD].PDFsetup\*[PREV] \[em]  adds PDF metadata (most importantly
+keywords) to the \[resume].
+.ITEM
+\*[BD].MYLINE\*[PREV] \[em] draws a fixed length (6.3in) black link
+starting slightly before the left margin.
+.ITEM
+\*[BD].EMPTY\*[PREV] \[em] a macro that explicitly does nothing.  Its
+primary use is to remove conditional code from the macros (see the
+.PDF_WWW_LINK https://en.wikipedia.org/wiki/Null_object_pattern "NULL object pattern"
+for inspiration) by passing in \*[BD].EMPTY\*[PREV] as an argument to
+another macro you can skip undesired formatting.
+.ITEM
+\*[BD].HEADER\*[PREV] \[em] creates a light-gray box with the
+\[resume] writer's name, email address and phone.
+.ITEM
+\*[BD].SECTION\*[PREV] \[em] sections are the fundamental building
+block for a \[resume] and there will typically consist of 4-5 of
+them.  Typical sections might be the following:
+.LIST DASH
+.ITEM
+education
+.ITEM
+employment
+.ITEM
+objective
+.ITEM
+military service
+.LIST OFF
+.ITEM
+\*[BD].SCHOOL\*[PREV] \[em] provides a simple way to format entries in
+an \*[IT]education\*[PREV] section.
+.ITEM
+\*[BD].EARLYJOBS\*[PREV] \[em] some jobs may be from a long time ago
+and warrant a brief mention.
+.ITEM
+\*[BD].POSITION\*[PREV] \[em] a macro for high-level documentation of your work.
+.ITEM
+\*[BD].LISTIFY\*[PREV] \[em] turns an indeterminate number of
+parameters into an unordered list.
+.LIST OFF
+
+The following macro is defined for \*[BD]internal use only:\*[PREV]
+.LIST
+.ITEM
+\*[BD]._LISTHELPER\*[PREV] \[em] a recursive macro designed for
+\*[BD]internal use only\*[PREV] by the \*[BD].LISTIFY\*[PREV] macro.
+.LIST OFF
+.bp
+.HEADING 1 NAMED details "Detailed Macro Information"
+.de ARGUMENT
+.ITEM
+\*[BD]\\$1\*[PREV]
+.BR
+    \*[IT]\\$2.\*[PREV]
+.BR
+.FN R
+..
+.de ARGUMENTLIST
+.   if (\\n[.$] == 0)
+.       return
+.   ARGUMENT \\$@
+.   shift 2
+.   ARGUMENTLIST \\$@
+..
+.de ARGUMENTS
+
+Arguments follow:
+
+.    LIST USER ""
+.    ARGUMENTLIST \\$@
+.    LIST OFF
+.    FT R
+..
+.
+.de MACRO2DOC
+.HEADING 2 NAMED \\$1 "Details for the .\*[BD]\\$1\*[PREV] macro"
+\\$2
+.bp
+..
+.de EXAMPLE
+\*[BD]Example:\*[PREV]
+.CODE
+ .\\$*
+.CODE OFF
+..
+.de PDFsetup
+Set several pieces of PDF metadata for the document.
+
+.ARGUMENTS Title "\*[IT]Title\*[PREV] field in PDF document" Author "\*[IT]Author\*[PREV] field in PDF document" Subject "\*[IT]Subject\*[PREV] field in the PDF document" Keywords "\*[IT]Keywords\*[PREV] field in the PDF document"
+All fields are strings.
+
+.EXAMPLE "PDFsetup aTitle ""Who AmI"" ""My Sub"" ""resume jobs"""
+..
+.MACRO2DOC PDFsetup .PDFsetup
+.de MYLINE
+Draw a horizontal line across the width of the page.  Starting just before the left margin and ending at the right margin.
+
+.ARGUMENTS adjustment "number(units: P) instructing \[groff] how far up to move before typesetting the line"
+
+.EXAMPLE "MYLINE 1P"
+..
+.MACRO2DOC MYLINE .MYLINE
+.de EMPTY
+A macro that purposely does absolutely nothing.  It swallows zero or more arguments and exists to be passed to a macro to avoid some type of customizable behavior.  It was influenced by the 
+.PDF_WWW_LINK https://en.wikipedia.org/wiki/Null_object_pattern "NULL object pattern"
+and helps keep macros free of conditional logic.  Instead of doing a test for a condition and skipping the behavior, we'll just pass the behavior in and nothing explicitly happens when \*[BD].EMPTY\*[PREV] is passed in.
+..
+.MACRO2DOC EMPTY .EMPTY
+.de HEADER_
+Typically be the first macro in a \[resume], this macro typesets the user's name and contact informatio
+
+.ARGUMENTS phone "contact phone number" email "contact electronic mail address" name "preferred name"
+
+Phone number is left-justified, email is right-justified, and name is larger and centered.
+
+.EXAMPLE "HEADER ""(212) 555-1212"" boo@hoo.com ""Scrooge McDuck"""
+..
+
+.MACRO2DOC HEADER .HEADER_
+.de SECTION
+This is the most complicated macro.  It takes 7 arguments that provide substantial customization capabilities.
+
+.ARGUMENTS section-name "what do you want to name your section. \[BD]will be put in a gray box with a larger type" spacing-macro ".BR | .EMPTY | .EL -- how to adjust your initial baseline" pt-size "point-size for the section-name" line-macro ".MYLINE | .EMPTY; draw a line or not" box-macro ".DBX | .EMPTY; draw a box or not" vspace "number to drop base" internal "a user-defined macro or .EMPTY that is called (without parameters) at the end of the macro."
+
+.EXAMPLE "SECTION Employment .EL 12 .MYLINE .DBX 4p .Employment
+..
+.MACRO2DOC SECTION .SECTION
+.de SCHOOL
+Used to create a consistently formatted educational item(s).
+
+.ARGUMENTS degree "your degree information. \*[BD]will be bolded\*[PREV]" school-name-and-address "what school and where. \*[BD]will be italicized\*[PREV'"
+
+.EXAMPLE "SCHOOL ""Bachelor of Science in Economics"" ""University of Awesome, Awesomeville, NY"""
+..
+.MACRO2DOC SCHOOL .SCHOOL
+.de EARLYJOBS
+If you have jobs from a long time ago that deserve a brief mention, use the \*[BD].EARLYJOBS\*[PREV] macro.
+
+.ARGUMENTS position-and-place "title, company and geography. \*[BD]this will be bolded.\*[PREV]" start-date "a free-form date" end-date "a free-form date"
+
+.EXAMPLE "EARLYJOBS ""Random employee  at A Random Corporation, Awesomeville, NY"" 1999 2004"
+..
+.MACRO2DOC EARLYJOBS .EARLYJOBS
+.de POSITION
+More current positions get more detailed information.
+
+.ARGUMENTS position "job title. \*[BD]this will be bolded\*[PREV]" who-where "company and geography. \*[BD]this will be underlined\*[PREV]" start-date "a free-form start date. \*[BD]this will be underlined\*[PREV]" end-date "a free-form end date. \*[BD]this will be underlined\*[PREV]" summary "detailed information on the position's responsibilities. \*[BD]this will be italicized\*[PREV]"
+
+.EXAMPLE "EXAMPLE ""Little cheese"" ""Random Corporation, Awesomeville, NY"" 2006 2010 ""Did a multitude of impressive things."""
+..
+.MACRO2DOC POSITION .POSITION
+.de LISTIFY
+This is a helper macro that turns its N parameters into an unordered list of N items using the standard \[bu] character.
+
+.EXAMPLE "LISTIFY a b c d"
+..
+.MACRO2DOC LISTIFY .LISTIFY
+.TOC
+
